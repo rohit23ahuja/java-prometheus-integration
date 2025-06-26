@@ -1,6 +1,6 @@
 package dev.rohitahuja.batchjobs;
 
-import dev.rohitahuja.metrics.MetricsManager;
+import dev.rohitahuja.metrics.ApplicationMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,16 +21,30 @@ public class VegetableBatchJob implements BatchJob {
     }
 
     private List<String> readItems() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return List.of("carrot", "spinach", "broccoli");
     }
 
     private List<String> processItems(List<String> items) {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return items.stream().map(s -> s + " (fresh)").toList();
     }
 
     private void writeItems(List<String> items) {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         items.forEach(item -> _log.info("Processed vegetable: {}", item));
-        MetricsManager.itemsProcessedCount.set(items.size());
     }
 }
 
