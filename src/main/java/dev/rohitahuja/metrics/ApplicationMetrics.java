@@ -1,31 +1,33 @@
 package dev.rohitahuja.metrics;
 
+import dev.rohitahuja.util.CurrentJobInfo;
 import io.prometheus.metrics.core.metrics.Gauge;
 import io.prometheus.metrics.model.snapshots.Unit;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ApplicationMetrics {
 
     private static final String JOB_LABEL_MEAL = "meal";
-    private static final Map<String, Gauge> _meters = Map.of();
+    private static Map<String, Gauge> _meters = new HashMap<>();
     private static String _jobStatusMeterKey = null;
     private static String _jobDurationMeterKey = null;
-    private static final ThreadLocal<Instant> _lastSampledInstant = new ThreadLocal<>();
-    private static String _feedName = null;
     private static String _jobType = null;
+    private static final ThreadLocal<Instant> _lastSampledInstant = new ThreadLocal<>();
 
-    private static void initializeKeysAndLabels(String jobName) {
-        _jobStatusMeterKey = String.join(jobName, JobMeters.JOB_STATUS.getName());
-        _jobDurationMeterKey = String.join(jobName, JobMeters.JOB_DURATION.getName());
+
+    private static void initializeKeysAndLabels() {
+        _jobStatusMeterKey = String.join(CurrentJobInfo.feedName(), JobMeters.JOB_STATUS.getName());
+        _jobDurationMeterKey = String.join(CurrentJobInfo.feedName(), JobMeters.JOB_DURATION.getName());
+        _jobType = CurrentJobInfo.jobType();
     }
 
     public static void metersCreate(final String jobName) {
         _lastSampledInstant.set(Instant.now());
-        identifyFeedNameAndJobType(jobName);
-        initializeKeysAndLabels(_feedName);
+        initializeKeysAndLabels();
         Gauge jobStatus = Gauge.builder()
                 .name(_jobStatusMeterKey)
                 .help("Status of the job")
@@ -74,12 +76,5 @@ public class ApplicationMetrics {
     public static void metersReset(final String jobName) {
         _meters.get(_jobDurationMeterKey).labelValues(_jobType).set(0);
     }
-
-    private static void identifyFeedNameAndJobType(String jobName) {
-        String[] parts = jobName.split("_", 2);
-        _feedName = parts.length > 0 ? parts[0] : "";
-        _jobType = parts.length > 1 ? parts[1] : "";
-    }
-
 
 }
