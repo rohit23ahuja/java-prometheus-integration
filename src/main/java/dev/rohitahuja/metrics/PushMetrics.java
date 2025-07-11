@@ -23,7 +23,7 @@ public class PushMetrics {
         scheduler = Executors.newScheduledThreadPool(ConfigReader.getInt("metrics.threadpool.size"));
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                pushGateway.pushAdd();
+                pushGateway.push();
             } catch (IOException e) {
                 _log.error("Error while pushing metrics: {}", e.getMessage(), e);
             }
