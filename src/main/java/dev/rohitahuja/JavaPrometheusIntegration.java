@@ -23,8 +23,17 @@ public class JavaPrometheusIntegration {
             BatchJob job = GenericBatchJobFactory.getJob(jobName);
             ApplicationMetricsGenericBatchJob.jobRunning();
             job.run();
-            _log.info("Batch job '{}' completed successfully.", jobName);
-            ApplicationMetricsGenericBatchJob.jobCompleted();
+            switch (jobName.split("_", 2)[1]) {
+                case "cng":
+                    throw new Exception("CNG batch job failed.");
+                case "hybrid":
+                    break;
+                default:
+                    _log.info("Batch job '{}' completed successfully.", jobName);
+                    ApplicationMetricsGenericBatchJob.jobCompleted();
+            }
+            //_log.info("Batch job '{}' completed successfully.", jobName);
+            //ApplicationMetricsGenericBatchJob.jobCompleted();
         } catch (Exception e) {
             _log.error("Error while executing batch job '{}': {}", jobName, e.getMessage(), e);
             ApplicationMetricsGenericBatchJob.jobFailed();

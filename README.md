@@ -25,3 +25,25 @@ https://stackoverflow.com/questions/60651605/are-counters-thread-safe-in-microme
 https://stackoverflow.com/questions/68838448/will-updating-a-micrometer-gauge-ever-block-the-calling-thread
 
 https://www.google.com/search?q=prometheus+counter+for+task+running+duration&sca_esv=cca5566734bdcf74&ei=Td5baN_mKPmj1e8P7OfjiAw&oq=prometheus+counter+for+task+running+durat&gs_lp=Egxnd3Mtd2l6LXNlcnAiKXByb21ldGhldXMgY291bnRlciBmb3IgdGFzayBydW5uaW5nIGR1cmF0KgIIADIFECEYoAEyBRAhGKABMgUQIRigAUiG1gVQpwhYtcYFcAF4AJABAJgB_QKgAdREqgEEMy0yNbgBA8gBAPgBAZgCGKAC3UDCAgoQABiwAxjWBBhHwgIFEAAYgATCAgsQABiABBiRAhiKBcICBhAAGBYYHsICCxAAGIAEGIYDGIoFwgIIEAAYgAQYogTCAggQABgIGA0YHsICCBAAGKIEGIkFwgIFEAAY7wXCAgUQIRifBcICBxAhGKABGAqYAwCIBgGQBgiSBwYxLjMtMjOgB4SPAbIHBDMtMjO4B8ZAwgcGMi0xNy43yAeXAQ&sclient=gws-wiz-serp&safe=active&ssui=on
+
+approach :-
+* autosys job - to delete push gateway, batch start counter to zero
+* autosys job - to delete push gateway metrics, batch start counter
+
+pending :-
+* to use push or pushAdd
+* remove utc from time stamp
+* table header last execution to "captured at"
+* pass time while running and failing
+* static gauge - percentage of jobs completed in last 12 hours
+* static gauge - percentage of jobs failed in last 12 hours
+* static gauge - percentage of ev jobs completed in last 12 hours 
+* static gauge - percentage of petrol jobs completed in last 12 hours
+* static gauge - percentage of hybrid jobs completed in last 12 hours
+* static counter - duration of how long the batches ran for the day
+* range interval - table that shows job durations
+* range interval - table that shows job statuses, sampled time
+* range interval - bar gauges of job durations
+* test dashboard on re-execution of same jobs
+* test dashboard on concurrent execution of jobs
+* trend of job duration using bars
