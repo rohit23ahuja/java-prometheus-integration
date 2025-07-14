@@ -31,18 +31,18 @@ approach :-
 * autosys job - to delete push gateway metrics, batch start counter
 
 pending :-
-* to use push or pushAdd
-* remove utc from time stamp
-* table header last execution to "captured at"
-* pass time while running and failing
+* to use push or pushAdd (to use pushAdd to cater for very short running jobs) - tbt
+* remove utc from time stamp - tbt
+* table header last execution to "captured at" - tbt
+* pass time while running and failing - tbt
 * static gauge - percentage of jobs completed in last 12 hours
 * static gauge - percentage of jobs failed in last 12 hours
 * static gauge - percentage of ev jobs completed in last 12 hours 
 * static gauge - percentage of petrol jobs completed in last 12 hours
 * static gauge - percentage of hybrid jobs completed in last 12 hours
 * static counter - duration of how long the batches ran for the day
-* range interval - table that shows job durations
-* range interval - table that shows job statuses, sampled time
+* range interval - table that shows job durations - tbt
+* range interval - table that shows job statuses, sampled time - tbt 
 * range interval - bar gauges of job durations
 * test dashboard on re-execution of same jobs
 * test dashboard on concurrent execution of jobs

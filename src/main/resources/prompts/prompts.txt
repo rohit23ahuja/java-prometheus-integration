@@ -1,0 +1,11 @@
+I am developer in a batch based application that has multiple batch jobs, the application is built using java language. my application is packaged as jar application and every time i need to execute these batch jobs i execute this jar. These batch jobs run daily. Only if some error occurs or manual intervention needed, we manually re-execute one or more of these batch jobs but this is not often. Most of the times only 1 job runs but some times i execute my jar parallely to execute jobs that can be run concurrently. I want to plot below information about these jobs in grafana :-
+1. percentage of batch jobs completed today
+2. percentage of batch jobs failed today
+3. percentage of batch jobs running now
+4. percentage of patricular type of batch jobs completed today (lets batch jobs having string "petrol" in job name)
+5. start time and end time of today's batch
+6. start time and end time of each job
+7. status of each job - three statuses i want to track - running, completed or failed
+8. duration of each batch job - for how long it ran
+
+my application pushes metrics to prometheus push gateway. prometheus server then scrapes metrics from it. use prometheus query i want to plot the data. tell me what kind of meters i should create in my application to achieve this. give me an efficient. i will use prometheus pushgateway java client

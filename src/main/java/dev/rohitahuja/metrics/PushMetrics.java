@@ -1,6 +1,5 @@
 package dev.rohitahuja.metrics;
 
-import dev.rohitahuja.JavaPrometheusIntegration;
 import dev.rohitahuja.util.ConfigReader;
 import io.prometheus.metrics.exporter.pushgateway.PushGateway;
 import org.slf4j.Logger;
@@ -20,10 +19,11 @@ public class PushMetrics {
                 .address(ConfigReader.get("metrics.pushgateway.url"))
                 .job(ConfigReader.get("metrics.job.name"))
                 .build();
+
         scheduler = Executors.newScheduledThreadPool(ConfigReader.getInt("metrics.threadpool.size"));
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                pushGateway.push();
+                pushGateway.pushAdd();
             } catch (IOException e) {
                 _log.error("Error while pushing metrics: {}", e.getMessage(), e);
             }

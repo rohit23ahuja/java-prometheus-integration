@@ -2,7 +2,7 @@ package dev.rohitahuja;
 
 import dev.rohitahuja.batchjobs.BatchJob;
 import dev.rohitahuja.batchjobs.GenericBatchJobFactory;
-import dev.rohitahuja.metrics.ApplicationMetricsGenericBatchJob;
+import dev.rohitahuja.metrics.BatchJobMetrics;
 import dev.rohitahuja.metrics.PushMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +16,13 @@ public class JavaPrometheusIntegration {
             return;
         }
         String jobName = args[0];
+        BatchJobMetrics batchJobMetrics =  new BatchJobMetrics(jobName);
         try {
+            _log.info("Starting batch job: {}", jobName);
             PushMetrics.start();
-            ApplicationMetricsGenericBatchJob.metersCreate(jobName);
 
             BatchJob job = GenericBatchJobFactory.getJob(jobName);
-            ApplicationMetricsGenericBatchJob.jobRunning();
+            batchJobMetrics.jobRunning();
             job.run();
             switch (jobName.split("_", 2)[1]) {
                 case "cng":
@@ -30,13 +31,13 @@ public class JavaPrometheusIntegration {
                     break;
                 default:
                     _log.info("Batch job '{}' completed successfully.", jobName);
-                    ApplicationMetricsGenericBatchJob.jobCompleted();
+                    batchJobMetrics.jobCompleted();
             }
             //_log.info("Batch job '{}' completed successfully.", jobName);
-            //ApplicationMetricsGenericBatchJob.jobCompleted();
+            //batchJobMetrics.jobCompleted();
         } catch (Exception e) {
             _log.error("Error while executing batch job '{}': {}", jobName, e.getMessage(), e);
-            ApplicationMetricsGenericBatchJob.jobFailed();
+            batchJobMetrics.jobFailed();
         } finally {
             try {
                 Thread.sleep(3000);

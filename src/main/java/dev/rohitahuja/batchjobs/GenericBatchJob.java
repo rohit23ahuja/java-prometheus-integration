@@ -1,6 +1,5 @@
 package dev.rohitahuja.batchjobs;
 
-import dev.rohitahuja.metrics.ApplicationMetricsGenericBatchJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,13 +17,10 @@ public class GenericBatchJob implements BatchJob {
         _log.info("Running {} batch job", jobName);
         letsSleep();
         doSomething();
-        ApplicationMetricsGenericBatchJob.jobRunning();
         letsSleep();
         stillDoingSomething();
-        ApplicationMetricsGenericBatchJob.jobRunning();
         letsSleep();
         willKeepOnDoingSomething();
-        ApplicationMetricsGenericBatchJob.jobRunning();
     }
 
     public void doSomething() {

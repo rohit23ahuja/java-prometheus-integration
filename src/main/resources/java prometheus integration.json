@@ -1,47 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS-DATASOURCE",
-      "label": "prometheus-datasource",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "panel",
-      "id": "bargauge",
-      "name": "Bar gauge",
-      "version": ""
-    },
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "11.0.4"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -61,13 +18,356 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 4,
   "links": [],
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS-DATASOURCE}"
+        "uid": "fef1fe932nd34d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": ""
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "100 * (sum(max_over_time({__name__=~\".*_job_completed_total\"}[$__range])) / (sum(max_over_time({__name__=~\".*_job_completed_total\"}[$__range])) + sum(max_over_time({__name__=~\".*_job_failed_total\"}[$__range]))) )",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "% of Jobs Completed",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "fef1fe932nd34d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "100 * (sum(max_over_time({__name__=~\".*_job_failed_total\"}[$__range])) / (sum(max_over_time({__name__=~\".*_job_completed_total\"}[$__range])) + sum(max_over_time({__name__=~\".*_job_failed_total\"}[$__range]))) )",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "% of Jobs Failed",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "fef1fe932nd34d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "100 * (sum(max_over_time({__name__=~\".*petrol_job_completed_total\"}[$__range])) / sum(max_over_time({__name__=~\".*petrol_job_completed_total\"}[$__range])) + sum(max_over_time({__name__=~\".*petrol_job_failed_total\"}[$__range])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "% of Petrol Jobs Completed",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "fef1fe932nd34d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": ""
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "100 * (sum(max_over_time({__name__=~\".*hybrid_job_completed_total\"}[$__range])) / sum(max_over_time({__name__=~\".*hybrid_job_completed_total\"}[$__range])) + sum(max_over_time({__name__=~\".*hybrid_job_failed_total\"}[$__range])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "% of Hybrid Jobs Completed",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "fef1fe932nd34d"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": ""
+              },
+              {
+                "color": "green",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 16,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "100 * (sum(max_over_time({__name__=~\".*cng_job_completed_total\"}[$__range])) / sum(max_over_time({__name__=~\".*cng_job_completed_total\"}[$__range])) + sum(max_over_time({__name__=~\".*cng_job_failed_total\"}[$__range])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "% of CNG Jobs Completed",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "fef1fe932nd34d"
       },
       "description": "",
       "fieldConfig": {
@@ -105,7 +405,7 @@
         "h": 17,
         "w": 6,
         "x": 0,
-        "y": 0
+        "y": 7
       },
       "id": 3,
       "options": {
@@ -124,16 +424,16 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "11.0.4",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS-DATASOURCE}"
+            "uid": "fef1fe932nd34d"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "last_over_time({__name__=~\".*_job_duration_seconds\"}[24h])",
+          "expr": "last_over_time({__name__=~\".*_job_duration_seconds\"}[$__range])",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -166,7 +466,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS-DATASOURCE}"
+        "uid": "fef1fe932nd34d"
       },
       "fieldConfig": {
         "defaults": {
@@ -219,7 +519,7 @@
         "h": 17,
         "w": 9,
         "x": 6,
-        "y": 0
+        "y": 7
       },
       "id": 5,
       "options": {
@@ -232,18 +532,24 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Captured At (UTC)"
+          }
+        ]
       },
-      "pluginVersion": "11.0.4",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS-DATASOURCE}"
+            "uid": "fef1fe932nd34d"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "last_over_time({__name__=~\".*_job_status\"}[24h])",
+          "expr": "last_over_time({__name__=~\".*_job_status\"}[$__range])",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -272,6 +578,7 @@
             },
             "renameByName": {
               "Value": "Status",
+              "capturedAt": "Captured At (UTC)",
               "jobname": "Job Name",
               "lastExecutionTime": "Last Execution Time"
             }
@@ -283,7 +590,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS-DATASOURCE}"
+        "uid": "fef1fe932nd34d"
       },
       "fieldConfig": {
         "defaults": {
@@ -313,11 +620,17 @@
         "h": 17,
         "w": 9,
         "x": 15,
-        "y": 0
+        "y": 7
       },
       "id": 4,
       "options": {
         "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
         "maxVizHeight": 19,
         "minVizHeight": 0,
         "minVizWidth": 8,
@@ -334,17 +647,17 @@
         "sizing": "manual",
         "valueMode": "color"
       },
-      "pluginVersion": "11.0.4",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS-DATASOURCE}"
+            "uid": "fef1fe932nd34d"
           },
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "{__name__=~\".*_job_duration_seconds\"}[24h]",
+          "expr": "{__name__=~\".*_job_duration_seconds\"}[$__range]",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": true,
@@ -360,7 +673,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS-DATASOURCE}"
+        "uid": "fef1fe932nd34d"
       },
       "fieldConfig": {
         "defaults": {
@@ -374,6 +687,7 @@
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 20,
             "gradientMode": "none",
@@ -404,8 +718,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -420,7 +733,7 @@
         "h": 10,
         "w": 18,
         "x": 0,
-        "y": 17
+        "y": 24
       },
       "id": 2,
       "options": {
@@ -431,16 +744,18 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "maxHeight": 600,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS-DATASOURCE}"
+            "uid": "fef1fe932nd34d"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -458,8 +773,9 @@
       "type": "timeseries"
     }
   ],
+  "preload": false,
   "refresh": "",
-  "schemaVersion": 39,
+  "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": []
@@ -468,11 +784,10 @@
     "from": "now-24h",
     "to": "now"
   },
-  "timeRangeUpdatedDuringEditOrView": false,
   "timepicker": {},
   "timezone": "browser",
   "title": "java prometheus integration",
   "uid": "eerh3aemvoge8d",
-  "version": 15,
+  "version": 45,
   "weekStart": ""
 }
