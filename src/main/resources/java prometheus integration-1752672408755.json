@@ -82,15 +82,11 @@
           },
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "red",
-                "value": null
-              },
-              {
                 "color": "orange",
-                "value": ""
+                "value": null
               },
               {
                 "color": "green",
@@ -231,8 +227,12 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "orange",
                 "value": null
+              },
+              {
+                "color": "green",
+                "value": 100
               }
             ]
           },
@@ -298,12 +298,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "orange",
                 "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": ""
               },
               {
                 "color": "green",
@@ -373,12 +369,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "orange",
                 "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": ""
               },
               {
                 "color": "green",
@@ -856,6 +848,6 @@
   "timezone": "browser",
   "title": "java prometheus integration",
   "uid": "eerh3aemvoge8d",
-  "version": 45,
+  "version": 55,
   "weekStart": ""
 }
