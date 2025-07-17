@@ -32,9 +32,6 @@ approach :-
 
 pending :-
 * to use push or pushAdd (to use pushAdd to cater for very short running jobs) - tbt
-* remove utc from time stamp - tbt
-* table header last execution to "captured at" - tbt
-* pass time while running and failing - tbt
 * static gauge - percentage of jobs completed in last 12 hours
 * static gauge - percentage of jobs failed in last 12 hours
 * static gauge - percentage of ev jobs completed in last 12 hours 
@@ -47,3 +44,5 @@ pending :-
 * test dashboard on re-execution of same jobs
 * test dashboard on concurrent execution of jobs
 * trend of job duration using bars
+* total batch time
+* batch time of particular types of job sets
