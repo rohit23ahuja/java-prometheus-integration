@@ -32,17 +32,9 @@ approach :-
 
 pending :-
 * to use push or pushAdd (to use pushAdd to cater for very short running jobs) - tbt
-* static gauge - percentage of jobs completed in last 12 hours
-* static gauge - percentage of jobs failed in last 12 hours
-* static gauge - percentage of ev jobs completed in last 12 hours 
-* static gauge - percentage of petrol jobs completed in last 12 hours
-* static gauge - percentage of hybrid jobs completed in last 12 hours
-* static counter - duration of how long the batches ran for the day
-* range interval - table that shows job durations - tbt
-* range interval - table that shows job statuses, sampled time - tbt 
-* range interval - bar gauges of job durations
-* test dashboard on re-execution of same jobs
-* test dashboard on concurrent execution of jobs
+* grouping key push gateway
 * trend of job duration using bars
+* static stat counter - batch time of particular types of job sets
+* test dashboard on concurrent execution of jobs
 * total batch time
-* batch time of particular types of job sets
+* alert queries

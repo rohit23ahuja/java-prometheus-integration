@@ -24,10 +24,10 @@ public class JavaPrometheusIntegration {
             BatchJob job = GenericBatchJobFactory.getJob(jobName);
             batchJobMetrics.jobRunning();
             job.run();
-            switch (jobName.split("_", 2)[1]) {
-                case "cng":
+            switch (jobName) {
+                case "dzire_cng":
                     throw new Exception("CNG batch job failed.");
-                case "hybrid":
+                case "vitara_hybrid":
                     break;
                 default:
                     _log.info("Batch job '{}' completed successfully.", jobName);
