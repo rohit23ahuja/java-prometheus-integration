@@ -9,3 +9,36 @@ I am developer in a batch based application that has multiple batch jobs, the ap
 8. duration of each batch job - for how long it ran
 
 my application pushes metrics to prometheus push gateway. prometheus server then scrapes metrics from it. use prometheus query i want to plot the data. tell me what kind of meters i should create in my application to achieve this. give me an efficient. i will use prometheus pushgateway java client
+
+==================================================================================================
+
+I want to create a script that will be executed on windows machine. I am giving below commands that need to be executed via this script. Some commands need to be executed parallelly. For commands that need to be executed in parallel, I am enclosing with 'parallel { }' block. Add some logging in the script.
+
+Parallel {
+Command 1 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "xuv700_petrol"
+Command 2 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "vitara_hybrid"
+Command 3 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "dzire_cng"
+}
+
+Command 4 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "bmwx1_hybrid"
+Command 5 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "elevate_petrol"
+Command 6 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "invicto_cng"
+
+### script should wait for 5 secs
+
+Command 7 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "camry_hybrid"
+Command 8 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "safari_diesel"
+Command 9 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "tesla_ev"
+Command 10 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "nexon_ev"
+
+Parallel {
+Command 11 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "taigun_petrol"
+Command 12 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "harrier_diesel"
+Command 13 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "creta_petrol"
+}
+
+### script should wait for 4 secs
+
+Command 14 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "xuv700_petrol"
+Command 15 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "elevate_petrol"
+Command 16 - curl -X DELETE http://localhost:9091/metrics/job/java-prometheus-integration
