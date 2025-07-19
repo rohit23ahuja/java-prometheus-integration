@@ -26,15 +26,11 @@ https://stackoverflow.com/questions/68838448/will-updating-a-micrometer-gauge-ev
 
 https://www.google.com/search?q=prometheus+counter+for+task+running+duration&sca_esv=cca5566734bdcf74&ei=Td5baN_mKPmj1e8P7OfjiAw&oq=prometheus+counter+for+task+running+durat&gs_lp=Egxnd3Mtd2l6LXNlcnAiKXByb21ldGhldXMgY291bnRlciBmb3IgdGFzayBydW5uaW5nIGR1cmF0KgIIADIFECEYoAEyBRAhGKABMgUQIRigAUiG1gVQpwhYtcYFcAF4AJABAJgB_QKgAdREqgEEMy0yNbgBA8gBAPgBAZgCGKAC3UDCAgoQABiwAxjWBBhHwgIFEAAYgATCAgsQABiABBiRAhiKBcICBhAAGBYYHsICCxAAGIAEGIYDGIoFwgIIEAAYgAQYogTCAggQABgIGA0YHsICCBAAGKIEGIkFwgIFEAAY7wXCAgUQIRifBcICBxAhGKABGAqYAwCIBgGQBgiSBwYxLjMtMjOgB4SPAbIHBDMtMjO4B8ZAwgcGMi0xNy43yAeXAQ&sclient=gws-wiz-serp&safe=active&ssui=on
 
-approach :-
-* autosys job - to delete push gateway, batch start counter to zero
-* autosys job - to delete push gateway metrics, batch start counter
-
 pending :-
+* do you really need delete job?
 * to use push or pushAdd (to use pushAdd to cater for very short running jobs) - tbt
 * grouping key push gateway
 * trend of job duration using bars
-* static stat counter - batch time of particular types of job sets
 * test dashboard on concurrent execution of jobs
 * total batch time
 * alert queries
