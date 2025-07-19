@@ -10,7 +10,7 @@ public class FruitBatchJob implements BatchJob {
     private static final Logger _log = LoggerFactory.getLogger(FruitBatchJob.class);
 
     @Override
-    public void run() {
+    public void run(long sleepTime) {
         _log.info("Running Fruit Batch Job");
 
         List<String> fruits = readItems();

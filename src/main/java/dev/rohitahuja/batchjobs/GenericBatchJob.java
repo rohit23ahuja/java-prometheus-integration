@@ -13,13 +13,13 @@ public class GenericBatchJob implements BatchJob {
     }
 
     @Override
-    public void run() {
+    public void run(long sleepTime) {
         _log.info("Running {} batch job", jobName);
-        letsSleep();
+        letsSleep(sleepTime);
         doSomething();
-        letsSleep();
+        letsSleep(sleepTime);
         stillDoingSomething();
-        letsSleep();
+        letsSleep(sleepTime);
         willKeepOnDoingSomething();
     }
 
