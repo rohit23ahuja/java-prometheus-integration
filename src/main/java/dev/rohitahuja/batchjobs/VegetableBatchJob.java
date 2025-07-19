@@ -10,7 +10,7 @@ public class VegetableBatchJob implements BatchJob {
     private static final Logger _log = LoggerFactory.getLogger(VegetableBatchJob.class);
 
     @Override
-    public void run() {
+    public void run(long sleepTime) {
         _log.info("Running Vegetable Batch Job");
 
         List<String> vegetables = readItems();

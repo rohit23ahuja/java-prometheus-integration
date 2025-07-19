@@ -14,44 +14,47 @@ import java.time.format.DateTimeFormatter;
 
 public class BatchJobMetrics {
     private static final Logger _log = LoggerFactory.getLogger(BatchJobMetrics.class);
-    private static final String UNDERSCORE = "_";
-    private static final String LABEL_JOBNAME = "jobname";
+    private static final String LABEL_FEEDNAME = "feedname";
     private static final String LABEL_CAPTURED_AT = "capturedAt";
+    private static final String LABEL_JOBTYPE = "jobtype";
 
-    private final ThreadLocal<Instant> lastSampledInstant;
-    private final Gauge jobStatus;
-    private final Gauge jobDuration;
-    private final Counter jobCompleted;
-    private final Counter jobFailed;
-    private final String jobName;
+    private final String feedName;
+    private final String jobType;
+    private Instant lastSampledInstant;
+    private static Gauge jobStatus;
+    private static Gauge jobDuration;
+    private static Counter jobCompleted;
+    private static Counter jobFailed;
+
 
     public BatchJobMetrics(String jobName) {
-        lastSampledInstant = new ThreadLocal<>();
-        lastSampledInstant.set(Instant.now());
-        this.jobName = jobName;
+        lastSampledInstant = Instant.now();
+        String[] parts = jobName.split("_", 2);
+        this.feedName = parts.length > 0 ? parts[0] : "";
+        this.jobType = parts.length > 1 ? parts[1] : "";
 
         jobStatus = Gauge.builder()
-                .name(String.join(UNDERSCORE, jobName, JobMeters.JOB_STATUS.getName()))
+                .name(JobMeters.JOB_STATUS.getName())
                 .help("Status of the job")
-                .labelNames(LABEL_JOBNAME, LABEL_CAPTURED_AT)
+                .labelNames(LABEL_FEEDNAME, LABEL_JOBTYPE, LABEL_CAPTURED_AT)
                 .register();
 
         jobDuration = Gauge.builder()
-                .name(String.join(UNDERSCORE, jobName, JobMeters.JOB_DURATION.getName()))
+                .name(JobMeters.JOB_DURATION.getName())
                 .help("Duration of the job")
-                .labelNames(LABEL_JOBNAME)
+                .labelNames(LABEL_FEEDNAME, LABEL_JOBTYPE)
                 .unit(Unit.SECONDS)
                 .register();
 
         jobCompleted = Counter.builder()
-                .name(String.join(UNDERSCORE, jobName, JobMeters.JOB_COMPLETED.getName()))
-                .labelNames(LABEL_JOBNAME)
+                .name(JobMeters.JOB_COMPLETED.getName())
+                .labelNames(LABEL_FEEDNAME, LABEL_JOBTYPE)
                 .help("Job completed")
                 .register();
 
         jobFailed = Counter.builder()
-                .name(String.join(UNDERSCORE, jobName, JobMeters.JOB_FAILED.getName()))
-                .labelNames(LABEL_JOBNAME)
+                .name(JobMeters.JOB_FAILED.getName())
+                .labelNames(LABEL_FEEDNAME, LABEL_JOBTYPE)
                 .help("Job failed")
                 .register();
     }
@@ -64,13 +67,13 @@ public class BatchJobMetrics {
                 .atZone(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ofPattern("MMM dd, yyyy h:mm:ss a"));
 
-        jobStatus.labelValues(jobName, currentUtcTime).set(JobStatus.RUNNING.getStatus());
+        jobStatus.labelValues(feedName, jobType, currentUtcTime).set(JobStatus.RUNNING.getStatus());
 
-        double currentDuration = jobDuration.labelValues(jobName).get();
-        long elapsedSecondsSinceLastSample = Duration.between(lastSampledInstant.get(), Instant.now()).toSeconds();
+        double currentDuration = jobDuration.labelValues(feedName, jobType).get();
+        long elapsedSecondsSinceLastSample = Duration.between(lastSampledInstant, Instant.now()).toSeconds();
         long total = elapsedSecondsSinceLastSample + (long) currentDuration;
-        lastSampledInstant.set(Instant.now());
-        jobDuration.labelValues(jobName).set(total);
+        lastSampledInstant = Instant.now();
+        jobDuration.labelValues(feedName,jobType).set(total);
 
     }
 
@@ -80,16 +83,16 @@ public class BatchJobMetrics {
         String currentUtcTime = Instant.now()
                 .atZone(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ofPattern("MMM dd, yyyy h:mm:ss a"));
-        jobStatus.labelValues(jobName, currentUtcTime).set(JobStatus.COMPLETED.getStatus());
-        jobCompleted.labelValues(jobName).inc();
-        jobFailed.labelValues(jobName).inc(0);
+        jobStatus.labelValues(feedName, jobType, currentUtcTime).set(JobStatus.COMPLETED.getStatus());
+        jobCompleted.labelValues(feedName, jobType).inc();
+        jobFailed.labelValues(feedName, jobType).inc(0);
 
 
-        double currentDuration = jobDuration.labelValues(jobName).get();
-        long elapsedSecondsSinceLastSample = Duration.between(lastSampledInstant.get(), Instant.now()).toSeconds();
+        double currentDuration = jobDuration.labelValues(feedName, jobType).get();
+        long elapsedSecondsSinceLastSample = Duration.between(lastSampledInstant, Instant.now()).toSeconds();
         long total = elapsedSecondsSinceLastSample + (long) currentDuration;
-        lastSampledInstant.set(Instant.now());
-        jobDuration.labelValues(jobName).set(total);
+        lastSampledInstant = Instant.now();
+        jobDuration.labelValues(feedName,jobType).set(total);
 
 
     }
@@ -100,15 +103,15 @@ public class BatchJobMetrics {
         String currentUtcTime = Instant.now()
                 .atZone(ZoneOffset.UTC)
                 .format(DateTimeFormatter.ofPattern("MMM dd, yyyy h:mm:ss a"));
-        jobStatus.labelValues(jobName, currentUtcTime).set(JobStatus.FAILED.getStatus());
-        jobFailed.labelValues(jobName).inc();
-        jobCompleted.labelValues(jobName).inc(0);
+        jobStatus.labelValues(feedName, jobType, currentUtcTime).set(JobStatus.FAILED.getStatus());
+        jobFailed.labelValues(feedName, jobType).inc();
+        jobCompleted.labelValues(feedName, jobType).inc(0);
 
-        double currentDuration = jobDuration.labelValues(jobName).get();
-        long elapsedSecondsSinceLastSample = Duration.between(lastSampledInstant.get(), Instant.now()).toSeconds();
+        double currentDuration = jobDuration.labelValues(feedName, jobType).get();
+        long elapsedSecondsSinceLastSample = Duration.between(lastSampledInstant, Instant.now()).toSeconds();
         long total = elapsedSecondsSinceLastSample + (long) currentDuration;
-        lastSampledInstant.set(Instant.now());
-        jobDuration.labelValues(jobName).set(total);
+        lastSampledInstant= Instant.now();
+        jobDuration.labelValues(feedName, jobType).set(total);
     }
 
 }

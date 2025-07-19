@@ -3,9 +3,12 @@ package dev.rohitahuja;
 import dev.rohitahuja.batchjobs.BatchJob;
 import dev.rohitahuja.batchjobs.GenericBatchJobFactory;
 import dev.rohitahuja.metrics.BatchJobMetrics;
+import dev.rohitahuja.metrics.BatchJobMetricsSingleApproach;
 import dev.rohitahuja.metrics.PushMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.random.RandomGenerator;
 
 public class JavaPrometheusIntegration {
     private static final Logger _log = LoggerFactory.getLogger(JavaPrometheusIntegration.class);
@@ -17,20 +20,41 @@ public class JavaPrometheusIntegration {
         }
         String jobName = args[0];
         BatchJobMetrics batchJobMetrics =  new BatchJobMetrics(jobName);
+        PushMetrics.start(jobName);
         try {
             _log.info("Starting batch job: {}", jobName);
-            PushMetrics.start();
 
-            BatchJob job = GenericBatchJobFactory.getJob(jobName);
             batchJobMetrics.jobRunning();
-            job.run();
+            BatchJob job = GenericBatchJobFactory.getJob(jobName);
+
+            long l = 0;
             switch (jobName) {
-                case "dzire_cng":
-                    throw new Exception("CNG batch job failed.");
-                case "vitara_hybrid":
+                case "i20_petrol":
+                    l = 1000;
+                    break;
+                case "a6_diesel":
+                    l = 2000;
+                    break;
+                case "baleno_petrol":
+                    l = 3000;
                     break;
                 default:
+                    l =RandomGenerator.getDefault().nextLong(4000, 20000);
+            }
+
+            job.run(l);
+            switch (jobName) {
+                case "eeco_cng":
+                case "verito_diesel":
+                case "dzire_cng":
+                    throw new Exception(jobName + " job failed.");
+//                case "landcruiser_hybrid":
+//                case "camry_hybrid":
+//                case "vitara_hybrid":
+//                    break;
+                default:
                     _log.info("Batch job '{}' completed successfully.", jobName);
+
                     batchJobMetrics.jobCompleted();
             }
             //_log.info("Batch job '{}' completed successfully.", jobName);

@@ -14,10 +14,11 @@ public class PushMetrics {
     private static final Logger _log = LoggerFactory.getLogger(PushMetrics.class);
 
     private static ScheduledExecutorService scheduler = null;
-    public static void start() {
+    public static void start(String jobName) {
         final PushGateway pushGateway = PushGateway.builder()
                 .address(ConfigReader.get("metrics.pushgateway.url"))
                 .job(ConfigReader.get("metrics.job.name"))
+                .groupingKey("job_name", jobName)
                 .build();
 
         scheduler = Executors.newScheduledThreadPool(ConfigReader.getInt("metrics.threadpool.size"));

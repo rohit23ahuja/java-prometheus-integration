@@ -42,3 +42,139 @@ Command 13 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "cr
 Command 14 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "xuv700_petrol"
 Command 15 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "elevate_petrol"
 Command 16 - curl -X DELETE http://localhost:9091/metrics/job/java-prometheus-integration
+
+========================================================================================================================
+I am developer in a batch based application that has multiple batch jobs, the application is built using java language. These batch jobs run daily. Only if some error occurs or manual intervention needed, we manually re-execute one or more of these batch jobs but this is not often. I have integrated prometheus pushgateway into this application to capture metrics. Prometheus metrics server scrapes metrics from pushgateway, since some of batch jobs are short lived. Also since jobs can be executed in parallel i have kept unique metrics name per job. For denoting batch job duration i have metric {JobName}_job_duration_seconds this means for jobs kushaq_petrol, camry_hybrid, safari_diesel, elevate_petrol I have metric kushaq_petrol_job_duration_seconds{job="java-prometheus-integration", jobname="kushaq_petrol"}, camry_hybrid_job_duration_seconds{job="java-prometheus-integration", jobname="camry_hybrid"}, safari_diesel_job_duration_seconds{job="java-prometheus-integration", jobname="safari_diesel"}, elevate_petrol_job_duration_seconds{job="java-prometheus-integration", jobname="elevate_petrol"} respectively. This metric is of type Gauge - value can do up and down. For example see below some sample data for job elevate_petrol , this is taken out from my prometheus server:-
+
+elevate_petrol_job_duration_seconds{job="java-prometheus-integration", jobname="elevate_petrol"}
+0 @1752664388.182
+0 @1752664390.179
+31 @1752664420.183
+31 @1752664422.182
+0 @1752664646.175
+0 @1752664648.185
+0 @1752723642.216
+37 @1752723680.205
+37 @1752723682.203
+37 @1752723684.216
+
+As you can probably determine from above data, elevate_petrol took 31 seconds to execute 1st time and 37 secs 2nd time. I want to have an Grafana visualisation panel - that gives me trend of job duration across multiple days for a particular job. for elevate_petrol assume on day 1 date - 18/7/2025 it took 31 secs and day 2 date - 19/7/2025 it took 37 secs. How can i plot this information in grafana panel? do i need to change my metric type from Gauge to something else? And comment on metric design i.e unique metric name per job (did it becase job can be executed in parallel, to avoid metric value override in push gateway)?
+
+========================================================================================================================
+I have an prometheus metric named job_status that denotes whether a job has been completed, failed or running via values 2, 3 or 1 respectively. in my grafana dashboard i want to show the count of currently running jobs. so from the below data only jobname="vitara" so the count should be 1. rest other jobname where running but have been either completed or failed.
+
+job_status{capturedAt="Jul 19, 2025 10:46:51 am", job="java-prometheus-integration", job_name="kushaq_petrol", jobname="kushaq", jobtype="petrol"}
+1
+job_status{capturedAt="Jul 19, 2025 10:47:44 am", job="java-prometheus-integration", job_name="kushaq_petrol", jobname="kushaq", jobtype="petrol"}
+2
+job_status{capturedAt="Jul 19, 2025 10:52:05 am", job="java-prometheus-integration", job_name="xuv700_petrol", jobname="xuv700", jobtype="petrol"}
+1
+job_status{capturedAt="Jul 19, 2025 10:52:33 am", job="java-prometheus-integration", job_name="xuv700_petrol", jobname="xuv700", jobtype="petrol"}
+2
+job_status{capturedAt="Jul 19, 2025 10:53:16 am", job="java-prometheus-integration", job_name="elevate_petrol", jobname="elevate", jobtype="petrol"}
+1
+job_status{capturedAt="Jul 19, 2025 10:53:59 am", job="java-prometheus-integration", job_name="elevate_petrol", jobname="elevate", jobtype="petrol"}
+2
+job_status{capturedAt="Jul 19, 2025 10:54:30 am", job="java-prometheus-integration", job_name="taigun_petrol", jobname="taigun", jobtype="petrol"}
+1
+job_status{capturedAt="Jul 19, 2025 10:55:08 am", job="java-prometheus-integration", job_name="taigun_petrol", jobname="taigun", jobtype="petrol"}
+2
+job_status{capturedAt="Jul 19, 2025 10:56:03 am", job="java-prometheus-integration", job_name="harrier_ev", jobname="harrier", jobtype="ev"}
+1
+job_status{capturedAt="Jul 19, 2025 10:56:23 am", job="java-prometheus-integration", job_name="harrier_ev", jobname="harrier", jobtype="ev"}
+2
+job_status{capturedAt="Jul 19, 2025 10:58:35 am", job="java-prometheus-integration", job_name="safari_diesel", jobname="safari", jobtype="diesel"}
+1
+job_status{capturedAt="Jul 19, 2025 10:58:55 am", job="java-prometheus-integration", job_name="safari_diesel", jobname="safari", jobtype="diesel"}
+2
+job_status{capturedAt="Jul 19, 2025 11:00:38 am", job="java-prometheus-integration", job_name="tesla_ev", jobname="tesla", jobtype="ev"}
+1
+job_status{capturedAt="Jul 19, 2025 11:01:30 am", job="java-prometheus-integration", job_name="tesla_ev", jobname="tesla", jobtype="ev"}
+2
+job_status{capturedAt="Jul 19, 2025 11:02:51 am", job="java-prometheus-integration", job_name="camry_hybrid", jobname="camry", jobtype="hybrid"}
+1
+job_status{capturedAt="Jul 19, 2025 11:03:17 am", job="java-prometheus-integration", job_name="camry_hybrid", jobname="camry", jobtype="hybrid"}
+2
+job_status{capturedAt="Jul 19, 2025 11:03:27 am", job="java-prometheus-integration", job_name="dzire_cng", jobname="dzire", jobtype="cng"}
+1
+job_status{capturedAt="Jul 19, 2025 11:04:19 am", job="java-prometheus-integration", job_name="dzire_cng", jobname="dzire", jobtype="cng"}
+3
+job_status{capturedAt="Jul 19, 2025 11:05:43 am", job="java-prometheus-integration", job_name="vitara_hybrid", jobname="vitara", jobtype="hybrid"}
+1
+
+========================================================================================================================
+I have an prometheus metric named job_status that denotes whether a job has been completed, failed or running via values 2, 3 or 1 respectively. in my grafana instance i want to define alert rules that send me an email if a job fails. from the below data i should get an alert within 10s for jobname "taigun_petrol" and "dzire_cng" as they have failed, value 3. tell me the query i need to write and also determine whether one alert will be needed or multiple. in my application in which this prometheus metric is defined job can run concurrently as well.
+
+job_status{capturedAt="Jul 19, 2025 10:46:51 am", job="java-prometheus-integration", job_name="kushaq_petrol", jobname="kushaq", jobtype="petrol"}
+1
+job_status{capturedAt="Jul 19, 2025 10:47:44 am", job="java-prometheus-integration", job_name="kushaq_petrol", jobname="kushaq", jobtype="petrol"}
+2
+job_status{capturedAt="Jul 19, 2025 10:52:05 am", job="java-prometheus-integration", job_name="xuv700_petrol", jobname="xuv700", jobtype="petrol"}
+1
+job_status{capturedAt="Jul 19, 2025 10:52:33 am", job="java-prometheus-integration", job_name="xuv700_petrol", jobname="xuv700", jobtype="petrol"}
+2
+job_status{capturedAt="Jul 19, 2025 10:53:16 am", job="java-prometheus-integration", job_name="elevate_petrol", jobname="elevate", jobtype="petrol"}
+1
+job_status{capturedAt="Jul 19, 2025 10:53:59 am", job="java-prometheus-integration", job_name="elevate_petrol", jobname="elevate", jobtype="petrol"}
+2
+job_status{capturedAt="Jul 19, 2025 10:54:30 am", job="java-prometheus-integration", job_name="taigun_petrol", jobname="taigun", jobtype="petrol"}
+1
+job_status{capturedAt="Jul 19, 2025 10:55:08 am", job="java-prometheus-integration", job_name="taigun_petrol", jobname="taigun", jobtype="petrol"}
+3
+job_status{capturedAt="Jul 19, 2025 10:56:03 am", job="java-prometheus-integration", job_name="harrier_ev", jobname="harrier", jobtype="ev"}
+1
+job_status{capturedAt="Jul 19, 2025 10:56:23 am", job="java-prometheus-integration", job_name="harrier_ev", jobname="harrier", jobtype="ev"}
+2
+job_status{capturedAt="Jul 19, 2025 10:58:35 am", job="java-prometheus-integration", job_name="safari_diesel", jobname="safari", jobtype="diesel"}
+1
+job_status{capturedAt="Jul 19, 2025 10:58:55 am", job="java-prometheus-integration", job_name="safari_diesel", jobname="safari", jobtype="diesel"}
+2
+job_status{capturedAt="Jul 19, 2025 11:00:38 am", job="java-prometheus-integration", job_name="tesla_ev", jobname="tesla", jobtype="ev"}
+1
+job_status{capturedAt="Jul 19, 2025 11:01:30 am", job="java-prometheus-integration", job_name="tesla_ev", jobname="tesla", jobtype="ev"}
+2
+job_status{capturedAt="Jul 19, 2025 11:02:51 am", job="java-prometheus-integration", job_name="camry_hybrid", jobname="camry", jobtype="hybrid"}
+1
+job_status{capturedAt="Jul 19, 2025 11:03:17 am", job="java-prometheus-integration", job_name="camry_hybrid", jobname="camry", jobtype="hybrid"}
+2
+job_status{capturedAt="Jul 19, 2025 11:03:27 am", job="java-prometheus-integration", job_name="dzire_cng", jobname="dzire", jobtype="cng"}
+1
+job_status{capturedAt="Jul 19, 2025 11:04:19 am", job="java-prometheus-integration", job_name="dzire_cng", jobname="dzire", jobtype="cng"}
+3
+job_status{capturedAt="Jul 19, 2025 11:05:43 am", job="java-prometheus-integration", job_name="vitara_hybrid", jobname="vitara", jobtype="hybrid"}
+1
+
+========================================================================================================================
+I want to create a script that will be executed on my windows machine. I am giving below commands that need to be executed via this script. Some commands need to be executed parallelly. For commands that need to be executed in parallel - i write them as parallel command and for commands to be executed sequentially i write them as command. do add some logging in the script.
+
+Parallel Command 1- java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "xuv700_petrol"
+Parallel Command 2 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "vitara_hybrid"
+Parallel Command 3 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "i20_petrol"
+
+Command 4 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "bmwx1_hybrid"
+Command 5 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "a6_diesel"
+Command 6 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "invicto_cng"
+
+### artificial delay for 5 secs
+
+Command 7 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "camry_hybrid"
+Command 8 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "safari_diesel"
+Command 9 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "tesla_ev"
+Command 10 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "nexon_ev"
+
+Parallel Command 11 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "taigun_petrol"
+Parallel Command 12 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "harrier_diesel"
+Parallel Command 13 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "creta_petrol"
+
+### artificial delay for 4 secs
+
+Command 14 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "xuv700_petrol"
+Command 15 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "elevate_petrol"
+Command 16 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "eeco_cng"
+
+Parallel Command 17 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "verito_diesel"
+Parallel Command 18 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "landcruiser_hybrid"
+Parallel Command 19 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "creta_petrol"
+
+Command 20 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "dzire_cng"
+Command 21 - java -jar .\target\java-prometheus-integration-1.0-SNAPSHOT.jar "xuv700_petrol"
