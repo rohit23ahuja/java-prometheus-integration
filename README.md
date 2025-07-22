@@ -28,12 +28,9 @@ https://www.google.com/search?q=prometheus+counter+for+task+running+duration&sca
 https://www.robustperception.io/choosing-your-pushgateway-grouping-key/
 
 pending :-
-* test dashboard on concurrent execution of jobs
-* total batch time
-* alert queries
-* prometheus global scrape interval
-* prometheus job level scrape interval
-* <10 secs job scraping
+* trend of job duration panel
+* application version panel
+* alerting logic testing with 1 meter or feed level meters 
 
 later :-
 * do you really need delete job?
